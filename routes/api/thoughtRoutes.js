@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const { Thought } = require('../../models');
+const { Thought, User } = require('../../models');
 
 // route to get all thoughts
-app.get('/api/thoughts', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const thoughts = await Thought.find();
         res.json(thoughts);
@@ -13,7 +13,7 @@ app.get('/api/thoughts', async (req, res) => {
  });
 
 // route to get thought by id
-app.get('/api/thoughts/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
         const thought = await Thought.findById(req.params.id);
         res.json(thought);
@@ -23,8 +23,21 @@ app.get('/api/thoughts/:id', async (req, res) => {
     }
 });
 
+//  route to post a new thought
+router.post('/', async (req, res) => {
+    try {
+        const thought = await Thought.create(req.body);
+        User.findOneAndUpdate({username: req.body.username}, {$push: {thoughts: thought._id}})
+        res.json(thought);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error});
+    }
+});
+
+
 // route to update a thought by its id
-app.put('/api/thoughts/:id', async (req, res) => {
+router.put('/api/thoughts/:id', async (req, res) => {
     try {
         const thought = await Thought.findByIdAndUpdate(
         req.params.id,
@@ -44,7 +57,7 @@ app.put('/api/thoughts/:id', async (req, res) => {
  });
 
 // route to delete a thought by id
-app.delete('/api/thoughts/:id', async (req, res) => {
+router.delete('/api/thoughts/:id', async (req, res) => {
     try {
       const deletedThought = await Thought.findByIdAndDelete(req.params.id);
       res.json(deletedThought);

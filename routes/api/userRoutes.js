@@ -2,20 +2,11 @@ const router = require('express').Router();
 const { User } = require('../../models');
 
 // route to get all users
-app.get('/api/users', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const users = await User.find()
       // provides other parameters that coincide with friend 
-      .populate([
-        {
-          path: 'friendIds',
-          select: 'username friendIds',
-        },
-        {
-            path: 'thought',
-            select: 'username thought',
-        }
-      ])
+      .populate('thoughts')
         res.json(users);
     } catch (error) {
         console.log(error);
@@ -24,7 +15,7 @@ app.get('/api/users', async (req, res) => {
  });
 
 // route to get user by id
-app.get('/api/users/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         res.json(user);
@@ -34,8 +25,19 @@ app.get('/api/users/:id', async (req, res) => {
     }
 });
 
+//  route to post a new user
+router.post('/', async (req, res) => {
+    try {
+        const user = await User.create(req.body);
+        res.json(user);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error});
+    }
+});
+
 // route to update a user by its id
-app.put('/api/users/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(
         req.params.id,
@@ -56,7 +58,7 @@ app.put('/api/users/:id', async (req, res) => {
  });
 
 // route to delete a user by id
-app.delete('/api/users/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
       const deletedUser = await User.findByIdAndDelete(req.params.id);
       res.json(deletedUser);
@@ -67,7 +69,7 @@ app.delete('/api/users/:id', async (req, res) => {
   })
 
 // PUT request to add a friend to someone
-app.put('/api/users/addFriend/:id', async (req, res) => {
+router.put('/addFriend/:id', async (req, res) => {
     try {
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
