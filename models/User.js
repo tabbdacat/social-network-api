@@ -40,19 +40,6 @@ const userSchema = new Schema(
   }
 );
 
-// // 
-// app.get('/api/users', async (req, res) => {
-//     try {
-//       const users = await User.find({
-//         // provides other parameters that coincide with friend 
-//         .populate({
-//           path: 'friends',
-//           // specifies what parameters you would like to join
-//           select: 'username'
-//         })
-//     })
-// }
-// })
 
 
 // Initialize our User model

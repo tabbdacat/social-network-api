@@ -4,7 +4,18 @@ const { User } = require('../../models');
 // route to get all users
 app.get('/api/users', async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find()
+      // provides other parameters that coincide with friend 
+      .populate([
+        {
+          path: 'friendIds',
+          select: 'username friendIds',
+        },
+        {
+            path: 'thought',
+            select: 'username thought',
+        }
+      ])
         res.json(users);
     } catch (error) {
         console.log(error);
