@@ -16,6 +16,7 @@ const userSchema = new Schema(
         required: [true, 'Where is your email?'],
         trim: true,
         lowercase: true, 
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
     thoughts: [
         {
@@ -40,6 +41,10 @@ const userSchema = new Schema(
   }
 );
 
+// creates virtual property called 'friendCount' that gets the amount of user's friends
+userSchema.virtual('friendCount').get(function () {
+  return this.friends.length;
+});
 
 
 // Initialize our User model
