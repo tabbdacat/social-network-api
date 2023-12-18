@@ -4,7 +4,10 @@ const dayjs = require('dayjs');
 // Child documents or subdocuments can be embedded into a parent document
 // the reactionSchema defines the shape for reaction subdocument
 const reactionSchema = new Schema({
-    type: Schema.Types.ObjectId,
+    reactionId: {
+        type: Schema.Types.ObjectId,
+        default: () => new Types.ObjectId(),
+    }
     reactionBody: {
         type: String,
         required: true,
@@ -17,12 +20,12 @@ const reactionSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: (date) => dayjs(date).format('DD/MM/YYYY'),
+        get: (date) => dayjs(date).format('MMM D, YYYY h:mm A'),
     },
 
   });
 
-// Schema to create User model
+// Schema to create Thought model
 const thoughtSchema = new Schema(
   {
     thoughtText: {
@@ -34,7 +37,7 @@ const thoughtSchema = new Schema(
     createdAt: {
         type: Date,
         default: Date.now,
-        get: (date) => dayjs(date).format('DD/MM/YYYY'),
+        get: (date) => dayjs(date).format('MMM D, YYYY h:mm A'),
     },
     username: {
         type: String,
@@ -55,6 +58,10 @@ const thoughtSchema = new Schema(
   }
 );
 
+// creates virtual property called 'reactionCount' that gets the amount of thought's reactions
+thoughtSchema.virtual('reactionCount').get(function () {
+    return this.reactions.length;
+  });
 
 
 // Initialize our Thought model
