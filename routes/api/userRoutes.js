@@ -69,13 +69,13 @@ router.delete('/:id', async (req, res) => {
   })
 
 // PUT request to add a friend to someone
-router.put('/addFriend/:id', async (req, res) => {
+router.put('/:userId/friends', async (req, res) => {
     try {
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
         {
           $addToSet: {
-            friendIds: req.body.friendId,
+            friends: req.body.friends,
           }
         },
         {

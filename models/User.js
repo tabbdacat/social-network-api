@@ -16,7 +16,7 @@ const userSchema = new Schema(
         required: [true, 'Where is your email?'],
         trim: true,
         lowercase: true, 
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email address']
     },
     thoughts: [
         {
@@ -51,3 +51,6 @@ userSchema.virtual('friendCount').get(function () {
 const User = model('User', userSchema);
 
 module.exports = User;
+
+// tab id: 657def84fe60e40c8df2d45b
+// tabbatha id: 6580d237e69676a01ce6ddde
