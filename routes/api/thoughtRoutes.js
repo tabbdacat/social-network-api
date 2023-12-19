@@ -83,7 +83,6 @@ router.post('/:thoughtId/reactions', async (req, res) => {
             { $addToSet: { reactions: req.body } },
             { new: true }
         );
-
         if (!thought) {
             return res.status(404).json({ message: 'No thought with this id!' });
         }
@@ -99,13 +98,11 @@ router.post('/:thoughtId/reactions', async (req, res) => {
 // route to delete a reaction by id
 router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
     try {
-        console.log(req.params);
         const thought = await Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $pull: { reactions: { _id: req.params.reactionId } } },
             { new: true },
-        )
-        console.log(thought);
+        );
         if (!thought) {
             return res.status(404).json({ message: 'No thought with this id!' });
         }
