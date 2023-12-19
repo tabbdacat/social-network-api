@@ -53,12 +53,8 @@ router.put('/:id', async (req, res) => {
     try {
         const thought = await Thought.findByIdAndUpdate(
         req.params.id,
-        {
-            thoughtText: req.body.thoughtText,
-        },
-        {
-            new: true,
-        }
+        { thoughtText: req.body.thoughtText },
+        { new: true }
         );
         await thought.save();
         res.json(thought);
@@ -85,6 +81,7 @@ router.post('/:thoughtId/reactions', async (req, res) => {
         const thought = await Thought.findOneAndUpdate(
           { _id: req.params.thoughtId },
           { $addToSet: { reactions: req.body } },
+          { new:true }
         );
   
         if (!thought) {
@@ -102,10 +99,13 @@ router.post('/:thoughtId/reactions', async (req, res) => {
 // route to delete a reaction by id
 router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
     try {
+        console.log(req.params);
         const thought = await Thought.findOneAndUpdate(
           { _id: req.params.thoughtId },
-          { $pull: { reaction: { reactionId: req.params.reactionId } } },
+          { $pull: { reactions: { _id: req.params.reactionId } } },
+          { new: true },
         )
+        console.log(thought);
         if (!thought) {
           return res.status(404).json({ message: 'No thought with this id!' });
         }

@@ -21,8 +21,13 @@ const reactionSchema = new Schema({
         type: Date,
         default: Date.now,
         get: (date) => dayjs(date).format('MMM D, YYYY h:mm A'),
+    },  
+  },
+  {
+    toJSON: {
+      getters: true,
     },
-
+    id: false,
   });
 
 // Schema to create Thought model
